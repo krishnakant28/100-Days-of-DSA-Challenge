@@ -1,0 +1,24 @@
+n = int(input())
+arr = list(map(int, input().split()))
+
+arr.sort()
+
+left = 0
+right = n - 1
+
+min_sum = float('inf')
+pair = (0, 0)
+
+while left < right:
+    s = arr[left] + arr[right]
+
+    if abs(s) < abs(min_sum):
+        min_sum = s
+        pair = (arr[left], arr[right])
+
+    if s < 0:
+        left += 1
+    else:
+        right -= 1
+
+print(pair[0], pair[1])
