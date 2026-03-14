@@ -1,0 +1,13 @@
+# Read size of array
+n = int(input())
+
+# Read array elements
+arr = list(map(int, input().split()))
+
+# Find maximum and minimum
+maximum = max(arr)
+minimum = min(arr)
+
+# Print results
+print("Max:", maximum)
+print("Min:", minimum)
