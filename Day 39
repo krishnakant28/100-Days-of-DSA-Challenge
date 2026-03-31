@@ -1,0 +1,67 @@
+class MinHeap:
+    def __init__(self):
+        self.heap = []
+
+    def insert(self, x):
+        self.heap.append(x)
+        self.heapify_up(len(self.heap) - 1)
+
+    def heapify_up(self, i):
+        while i > 0:
+            parent = (i - 1) // 2
+            if self.heap[parent] > self.heap[i]:
+                self.heap[parent], self.heap[i] = self.heap[i], self.heap[parent]
+                i = parent
+            else:
+                break
+
+    def extractMin(self):
+        if len(self.heap) == 0:
+            return -1
+        if len(self.heap) == 1:
+            return self.heap.pop()
+
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self.heapify_down(0)
+        return root
+
+    def heapify_down(self, i):
+        size = len(self.heap)
+        while True:
+            smallest = i
+            left = 2 * i + 1
+            right = 2 * i + 2
+
+            if left < size and self.heap[left] < self.heap[smallest]:
+                smallest = left
+            if right < size and self.heap[right] < self.heap[smallest]:
+                smallest = right
+
+            if smallest != i:
+                self.heap[i], self.heap[smallest] = self.heap[smallest], self.heap[i]
+                i = smallest
+            else:
+                break
+
+    def peek(self):
+        if len(self.heap) == 0:
+            return -1
+        return self.heap[0]
+
+
+# -------- Driver Code --------
+n = int(input())
+minHeap = MinHeap()
+
+for _ in range(n):
+    operation = input().split()
+
+    if operation[0] == "insert":
+        minHeap.insert(int(operation[1]))
+
+    elif operation[0] == "extractMin":
+        print(minHeap.extractMin())
+
+    elif operation[0] == "peek":
+        print(minHeap.peek())
