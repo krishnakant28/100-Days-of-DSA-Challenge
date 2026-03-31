@@ -1,0 +1,22 @@
+from collections import deque
+
+# Input
+n = int(input())
+arr = list(map(int, input().split()))
+
+# Step 1: Create queue
+queue = deque(arr)
+
+# Step 2: Create stack
+stack = []
+
+# Step 3: Push all elements into stack
+while queue:
+    stack.append(queue.popleft())
+
+# Step 4: Push back into queue (reversed order)
+while stack:
+    queue.append(stack.pop())
+
+# Step 5: Print result
+print(*queue)
