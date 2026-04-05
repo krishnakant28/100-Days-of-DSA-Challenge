@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure of a node
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+// Function to create a new node
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Function to search in BST
+struct Node* searchBST(struct Node* root, int key) {
+    // Base case
+    if (root == NULL || root->data == key)
+        return root;
+
+    // If key is smaller, search left
+    if (key < root->data)
+        return searchBST(root->left, key);
+
+    // If key is larger, search right
+    return searchBST(root->right, key);
+}
