@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+
+// Build tree from level order
+Node* buildTree(vector<int>& arr) {
+    if (arr.size() == 0 || arr[0] == -1) return NULL;
+
+    Node* root = new Node(arr[0]);
+    queue<Node*> q;
+    q.push(root);
+
+    int i = 1;
+    while (!q.empty() && i < arr.size()) {
+        Node* curr = q.front();
+        q.pop();
+
+        if (arr[i] != -1) {
+            curr->left = new Node(arr[i]);
+            q.push(curr->left);
+        }
+        i++;
+
+        if (i < arr.size() && arr[i] != -1) {
+            curr->right = new Node(arr[i]);
+            q.push(curr->right);
+        }
+        i++;
+    }
+    return root;
+}
+
+// Check mirror
+bool isMirror(Node* left, Node* right) {
+    if (!left && !right) return true;
+    if (!left || !right) return false;
+
+    return (left->data == right->data) &&
+           isMirror(left->left, right->right) &&
+           isMirror(left->right, right->left);
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    Node* root = buildTree(arr);
+
+    if (!root) {
+        cout << "YES";
+        return 0;
+    }
+
+    if (isMirror(root->left, root->right))
+        cout << "YES";
+    else
+        cout << "NO";
+
+    return 0;
+}
