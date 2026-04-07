@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+
+    Node(int v) {
+        val = v;
+        left = right = NULL;
+    }
+};
+
+int preIndex = 0;
+
+// Function to build tree
+Node* buildTree(vector<int>& preorder, vector<int>& inorder, 
+                int inStart, int inEnd, unordered_map<int, int>& mp) {
+    
+    if (inStart > inEnd) return NULL;
+
+    // Pick current root from preorder
+    int rootVal = preorder[preIndex++];
+    Node* root = new Node(rootVal);
+
+    // Find index in inorder
+    int inIndex = mp[rootVal];
+
+    // Build left and right subtree
+    root->left = buildTree(preorder, inorder, inStart, inIndex - 1, mp);
+    root->right = buildTree(preorder, inorder, inIndex + 1, inEnd, mp);
+
+    return root;
+}
+
+// Postorder traversal
+void postorder(Node* root) {
+    if (!root) return;
+    postorder(root->left);
+    postorder(root->right);
+    cout << root->val << " ";
+}
+
+int main() {
+    int N;
+    cin >> N;
+
+    vector<int> preorder(N), inorder(N);
+
+    for (int i = 0; i < N; i++) cin >> preorder[i];
+    for (int i = 0; i < N; i++) cin >> inorder[i];
+
+    unordered_map<int, int> mp;
+    for (int i = 0; i < N; i++) {
+        mp[inorder[i]] = i;
+    }
+
+    Node* root = buildTree(preorder, inorder, 0, N - 1, mp);
+
+    postorder(root);
+
+    return 0;
+}
