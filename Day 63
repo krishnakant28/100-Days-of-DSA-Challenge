@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+// Adjacency list node
+struct Node {
+    int vertex;
+    struct Node* next;
+};
+
+// Graph structure
+struct Graph {
+    int n;
+    struct Node* adj[MAX];
+};
+
+// Create new node
+struct Node* createNode(int v) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->vertex = v;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Add edge (undirected graph)
+void addEdge(struct Graph* g, int u, int v) {
+    struct Node* newNode = createNode(v);
+    newNode->next = g->adj[u];
+    g->adj[u] = newNode;
+
+    newNode = createNode(u);
+    newNode->next = g->adj[v];
+    g->adj[v] = newNode;
+}
+
+// DFS function
+void DFS(struct Graph* g, int v, int visited[]) {
+    printf("%d ", v);
+    visited[v] = 1;
+
+    struct Node* temp = g->adj[v];
+    while (temp != NULL) {
+        int adjVertex = temp->vertex;
+        if (!visited[adjVertex]) {
+            DFS(g, adjVertex, visited);
+        }
+        temp = temp->next;
+    }
+}
+
+int main() {
+    int n, m, u, v, s;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    struct Graph* g = (struct Graph*)malloc(sizeof(struct Graph));
+    g->n = n;
+
+    // Initialize adjacency list
+    for (int i = 0; i < n; i++) {
+        g->adj[i] = NULL;
+    }
+
+    printf("Enter number of edges: ");
+    scanf("%d", &m);
+
+    printf("Enter edges (u v):\n");
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d", &u, &v);
+        addEdge(g, u, v);
+    }
+
+    printf("Enter starting vertex: ");
+    scanf("%d", &s);
+
+    int visited[MAX] = {0};
+
+    printf("DFS Traversal: ");
+    DFS(g, s, visited);
+
+    return 0;
+}
