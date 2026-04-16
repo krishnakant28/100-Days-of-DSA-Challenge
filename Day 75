@@ -1,0 +1,28 @@
+def longest_zero_sum_subarray(arr):
+    prefix_sum = 0
+    max_length = 0
+    sum_index_map = {}
+
+    for i in range(len(arr)):
+        prefix_sum += arr[i]
+
+        # Case 1: If prefix sum is 0
+        if prefix_sum == 0:
+            max_length = i + 1
+
+        # Case 2: If prefix sum seen before
+        if prefix_sum in sum_index_map:
+            length = i - sum_index_map[prefix_sum]
+            max_length = max(max_length, length)
+        else:
+            # Store first occurrence
+            sum_index_map[prefix_sum] = i
+
+    return max_length
+
+
+# Sample Input
+arr = [15, -2, 2, -8, 1, 7, 10, 23]
+
+# Output
+print(longest_zero_sum_subarray(arr))
