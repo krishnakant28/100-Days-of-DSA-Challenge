@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N 100
+
+// Structure for a bucket (linked list)
+typedef struct Node {
+    float data;
+    struct Node* next;
+} Node;
+
+// Insert in sorted order (Insertion Sort for bucket)
+Node* insertSorted(Node* head, float value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (head == NULL || value < head->data) {
+        newNode->next = head;
+        return newNode;
+    }
+
+    Node* curr = head;
+    while (curr->next != NULL && curr->next->data < value) {
+        curr = curr->next;
+    }
+
+    newNode->next = curr->next;
+    curr->next = newNode;
+
+    return head;
+}
+
+void bucketSort(float arr[], int n) {
+    Node* buckets[n];
+
+    // Initialize buckets
+    for (int i = 0; i < n; i++)
+        buckets[i] = NULL;
+
+    // Put elements into buckets
+    for (int i = 0; i < n; i++) {
+        int index = n * arr[i];
+        buckets[index] = insertSorted(buckets[index], arr[i]);
+    }
+
+    // Concatenate buckets
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        Node* temp = buckets[i];
+        while (temp != NULL) {
+            arr[k++] = temp->data;
+            temp = temp->next;
+        }
+    }
+}
+
+// Driver code
+int main() {
+    float arr[] = {0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    bucketSort(arr, n);
+
+    printf("Sorted array:\n");
+    for (int i = 0; i < n; i++)
+        printf("%.2f ", arr[i]);
+
+    return 0;
+}
